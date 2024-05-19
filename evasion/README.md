@@ -1,57 +1,91 @@
-That's great to hear! This versatile script can be a powerful tool for penetration testing. Here's a final overview of what each function does and how to use it:
+# Spoofer
 
-### Overview
+A versatile tool for MAC address spoofing, ARP spoofing, CAM overwriting, DOS attacks, and packet capturing.
 
-- **MAC Spoofing**: Change your MAC address to a random or specified manufacturer's MAC.
-- **Revert MAC**: Restore your original MAC address.
-- **Subnet Scan**: Identify devices on the local subnet.
-- **Overwrite CAM**: Overwrite the CAM table of the local router to impersonate a device.
-- **ARP Spoofing**: Send ARP replies to make devices believe you are the gateway.
-- **DoS Attack**: Perform a DoS attack on a specified target.
-- **Packet Capture**: Capture network traffic intended for the target.
+## Dependencies
 
-### Dependencies
-- Python 3
-- `subprocess`, `re`, `random`, `argparse`
-- `scapy` (install using `pip install scapy`)
-- `arp-scan`, `arpspoof`, `hping3` (install using `sudo apt-get install arp-scan dsniff hping3` or `sudo yum install arp-scan dsniff hping3`)
+- `python3`
+- `scapy`
+- `arp-scan`
+- `arpspoof`
+- `hping3`
 
-### Usage
+## Installation
 
-1. **Scan Subnet**
+1. **Install Python dependencies:**
    ```bash
-   sudo python spoofer.py --scan
+   pip install scapy
    ```
 
-2. **Change MAC Address**
+2. **Install system dependencies:**
    ```bash
-   sudo python spoofer.py -i <interface> -m <manufacturer>
+   sudo dnf install arp-scan arpspoof hping3
    ```
 
-3. **Revert MAC Address**
-   ```bash
-   sudo python spoofer.py -i <interface> --revert
-   ```
+## Usage
 
-4. **Overwrite CAM and DoS Target**
-   ```bash
-   sudo python spoofer.py --overwrite-cam --dos --router-ip <router-ip> --target-ip <target-ip>
-   ```
-
-5. **ARP Spoof Devices**
-   ```bash
-   sudo python spoofer.py --arp-spoof --router-ip <router-ip> --target-ip <target-ip>
-   ```
-
-6. **Capture Packets**
-   ```bash
-   sudo python spoofer.py --capture --router-ip <router-ip> --target-ip <target-ip> --output-file <file.pcap>
-   ```
-
-### Example
-To overwrite the CAM, perform a DoS attack, and capture packets:
+### Scan Subnet for Available MAC Addresses
 ```bash
-sudo python spoofer.py --overwrite-cam --dos --capture --router-ip 192.168.1.1 --target-ip 192.168.1.100 --output-file captured_packets.pcap
+sudo python spoofer.py --scan
 ```
 
-This comprehensive tool helps you perform various network penetration testing tasks, providing flexibility and power in a single script. Always ensure you have permission to perform these actions on any network.
+### Change MAC Address
+```bash
+sudo python spoofer.py -i <interface> -m <manufacturer>
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 -m samsung
+```
+
+### Revert to Original MAC Address
+```bash
+sudo python spoofer.py -i <interface> --revert
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 --revert
+```
+
+### Overwrite CAM of Local Router
+```bash
+sudo python spoofer.py -i <interface> --overwrite-cam --router-ip <router-ip>
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 --overwrite-cam --router-ip 192.168.1.1
+```
+
+### ARP Spoof Devices to Believe You Are the Gateway
+```bash
+sudo python spoofer.py -i <interface> --arp-spoof --router-ip <router-ip> --target-ip <target-ip>
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 --arp-spoof --router-ip 192.168.1.1 --target-ip 192.168.1.100
+```
+
+### Perform DOS Attack on Target
+```bash
+sudo python spoofer.py -i <interface> --dos --target-ip <target-ip>
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 --dos --target-ip 192.168.1.100
+```
+
+### Capture Packets Intended for the Target
+```bash
+sudo python spoofer.py -i <interface> --capture --target-ip <target-ip> --output-file <output-file>
+```
+*Example:*
+```bash
+sudo python spoofer.py -i eth0 --capture --target-ip 192.168.1.100 --output-file captured_packets.pcap
+```
+
+## Notes
+
+- Ensure you have the necessary permissions to run the commands and perform the operations.
+- Use responsibly and only for legitimate security testing and educational purposes.
+```
+
