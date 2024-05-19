@@ -162,4 +162,3 @@ sudo ./pwdump7
 ```
 
 This document provides a variety of tools for password retrieval on Linux systems. Use these tools responsibly and only for authorized testing and educational purposes.
-```
