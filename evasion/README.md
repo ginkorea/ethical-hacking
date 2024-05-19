@@ -1,92 +1,62 @@
-# MAC Address Spoofer
+# Spoofer
 
-## Description
-
-`mac_spoofer.py` is a Python script designed to spoof the MAC address of network interfaces. This can be useful for various purposes, such as privacy protection, network security testing, and bypassing MAC address filtering.
+This Python script allows you to spoof your MAC address for penetration testing purposes. It provides functionalities to change the MAC address, revert it to the original, scan the local subnet for available MAC addresses, and perform ARP spoofing.
 
 ## Requirements
 
 - Python 3
-- `subprocess` module (included in the Python standard library)
-- Root privileges to execute network interface changes
+- `arp-scan` and `arpspoof` tools installed
+
+To install the required tools on Fedora:
+```sh
+sudo dnf install arp-scan dsniff
+```
 
 ## Usage
 
-### Basic Usage
+### Arguments
 
-To run the script with default settings, which will spoof the MAC address of all network interfaces with a randomly chosen manufacturer prefix:
+- `-i`, `--interface`: Network interface to spoof (default: all)
+- `-m`, `--manufacturer`: Manufacturer for MAC address prefix (default: random)
+- `--revert`: Revert to the original MAC address
+- `--scan`: Scan subnet for available MAC addresses
+- `--overwrite-cam`: Overwrite CAM of the local router
+- `--arp-spoof`: ARP spoof devices to believe you are the gateway
+- `--router-ip`: IP address of the router for CAM overwriting
+- `--target-ip`: IP address of the target device for ARP spoofing
 
+### Examples
+
+#### Change MAC Address
+Change the MAC address of a specific interface to a random address from a specified manufacturer.
 ```sh
-sudo python3 mac_spoof.py
+sudo python spoofer.py -i wlo1 -m samsung
 ```
 
-### Specify Network Interface and Manufacturer
-
-You can specify a particular network interface and a manufacturer prefix:
-
+#### Revert to Original MAC Address
+Revert the MAC address of a specific interface to the original.
 ```sh
-sudo python3 mac_spoof.py -i <interface> -m <manufacturer>
+sudo python spoofer.py -i wlo1 --revert
 ```
 
-- `<interface>`: The network interface to spoof (e.g., `eth0`, `wlan0`).
-- `<manufacturer>`: The manufacturer for the MAC address prefix. Options are `samsung`, `sony`, `dell`, and `konko`.
-
-Example:
-
+#### Scan Subnet
+Scan the subnet for available MAC addresses.
 ```sh
-sudo python3 mac_spoof.py -i eth0 -m samsung
+sudo python spoofer.py --scan
 ```
 
-### Revert to Original MAC Address
-
-To revert a specific network interface to its original MAC address:
-
+#### Overwrite CAM
+Overwrite the CAM of the local router with a specified target MAC address.
 ```sh
-sudo python3 mac_spoof.py -i <interface> --revert
+sudo python spoofer.py --overwrite-cam --router-ip 192.168.1.1
 ```
 
-Example:
-
+#### ARP Spoofing
+ARP spoof devices to believe you are the gateway.
 ```sh
-sudo python3 mac_spoof.py -i eth0 --revert
+sudo python spoofer.py --arp-spoof --router-ip 192.168.1.1 --target-ip 192.168.1.100
 ```
 
-### Help
+## Script
 
-To display the help message and see all options:
-
-```sh
-python3 mac_spoof.py -h
-```
-
-## Script Details
-
-### Class: `MacSpoofer`
-
-This class handles MAC address spoofing.
-
-#### Methods
-
-- `__init__(self, interface=None, manufacturer=None)`: Initializes the MacSpoofer with an interface and manufacturer.
-- `get_interfaces(self)`: Returns a list of all network interfaces.
-- `generate_mac(self)`: Generates a new MAC address based on the chosen manufacturer.
-- `change_mac(self, new_mac, interface)`: Changes the MAC address of the specified interface to the new MAC address.
-- `revert_mac(self, interface)`: Reverts the MAC address of the specified interface to its original MAC address.
-- `get_original_mac(self, interface)`: Gets the original MAC address of the specified interface.
-
-## Example Manufacturers
-
-- samsung
-- sony
-- dell
-- konko
-
-## Notes
-
-- Ensure you have Python installed on your system.
-- Changing MAC addresses is useful for certain pentesting activities but should be done responsibly and within legal boundaries.
-
-## License
-
-This project is licensed under the GNU General Public License V3.
-
+Please refer to the `spoofer.py` file in the repository for the full script implementation.
