@@ -1,0 +1,7 @@
+
+BSSID, First time seen, Last time seen, channel, Speed, Privacy, Cipher, Authentication, Power, # beacons, # IV, LAN IP, ID-length, ESSID, Key
+80:CA:4B:57:68:F2, 2024-06-25 06:29:59, 2024-06-25 06:34:06,  1, 130, WPA2, CCMP, PSK, -65,     1818,      171,   0.  0.  0.  0,   9, U+Net68F0, 
+
+Station MAC, First time seen, Last time seen, Power, # packets, BSSID, Probed ESSIDs
+50:FD:D5:F3:D1:D8, 2024-06-25 06:31:01, 2024-06-25 06:33:55, -85,     1166, 80:CA:4B:57:68:F2,
+
